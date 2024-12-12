@@ -1,0 +1,84 @@
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Map</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script src="https://unpkg.com/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
+    <script src="{% static 'js/scripts.js' %}"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Left Panel: Map Grid with Panzoom -->
+        <div class="grid-panzoom" id="panzoom-element">
+            <div class="grid" id="map">
+                {% for tile in tiles %}
+                    <div
+                        class="tile"
+                        data-id="{{ tile.id }}"
+                        data-x="{{ tile.x }}"
+                        data-y="{{ tile.y }}"
+                        data-buildings="{{ tile.buildings|escapejs }}"
+                        data-resources="{{ tile.resources|escapejs }}"
+                        data-population="{{ tile.population }}"
+                        data-goods="{{ tile.goods}}"
+                        data-owner="{{ tile.owner_id }}"
+                        data-display="{{ tile.owner.profile.display_name }}"
+                        data-owner-color="{{ tile.owner.profile.color }}"
+                        style="grid-column: {{ tile.x|add:1 }}; grid-row: {{ tile.y|add:1 }}; background-color: {{ tile.terrain_color }};"
+                        onclick="showTileDetails({{ tile.id }}, {{ tile.x }}, {{ tile.y }}, '{{ tile.buildings|escapejs }}', '{{ tile.resources|escapejs }}', '{{ tile.goods|escapejs }}', '{{ tile.owner.profile.display_name|escapejs }}', '{{ tile.owner.population|escapejs }}')"
+                        onmousemove="showTooltip(event, {{ tile.id }}, {{ tile.x }}, {{ tile.y }}, '{{ tile.buildings|escapejs }}', '{{ tile.resources|escapejs }}', '{{ tile.owner.profile.display_name|escapejs }}', '{{ tile.population }}')"
+                        onmouseout="hideTooltip()">
+                        {% if tile.image %}
+                            <img src="{{ tile.image.url }}" alt="Tile Image" style="width: 100%; height: 100%;">
+                        {% else %}
+                            <p>{{ tile.x }}, {{ tile.y }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Right Panel: User and Tile Details -->
+        <div class="details">
+            <!-- Top Section: User Info -->
+            <div id="user-info">
+                <h2>User Info</h2>
+                <p><strong>Nation:</strong> {{ display_name }}</p>
+                <p><strong>Money:</strong> {{ money }}</p>
+                <p><strong>Total Population:</strong> {{ user_population }}</p>
+            </div>
+
+            <!-- Tile Details Section -->
+            <div id="tile-details">
+                <!-- Tabs -->
+                <div class="tabs">
+                    <button id="details-tab-button" class="tab-button active-tab" onclick="selectTab('details')">Tile Details</button>
+                    <button id="goods-tab-button" class="tab-button" onclick="selectTab('goods')">Goods</button>
+                </div>
+
+                <!-- Tab Content -->
+                <div id="details-tab" class="tab-content">
+                    <h2>Tile Details</h2>
+                    <p>Select a tile to view its information here.</p> <!-- Default welcome message -->
+                </div>
+
+                <div id="goods-tab" class="tab-content" style="display: none;">
+                    <h2>Goods</h2>
+                    <p>Select a tile to view its goods here.</p>
+                </div>
+            </div>
+
+            <!-- User Actions Section -->
+            <div id="user-actions">
+                <h2>Actions</h2>
+                <ul id="action-list">
+                    <!-- User actions will populate here -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tooltip Box -->
+    <div id="tooltip" class="tooltip"></div>
+</body>

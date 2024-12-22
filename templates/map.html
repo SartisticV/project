@@ -22,11 +22,11 @@
                         data-resources="{{ tile.resources|escapejs }}"
                         data-population="{{ tile.population }}"
                         data-goods="{{ tile.goods}}"
+                        data-moving-goods="{{ tile.moving_goods}}"
                         data-owner="{{ tile.owner_id }}"
                         data-display="{{ tile.owner.profile.display_name }}"
                         data-owner-color="{{ tile.owner.profile.color }}"
                         style="grid-column: {{ tile.x|add:1 }}; grid-row: {{ tile.y|add:1 }}; background-color: {{ tile.terrain_color }};"
-                        onclick="showTileDetails({{ tile.id }}, {{ tile.x }}, {{ tile.y }}, '{{ tile.buildings|escapejs }}', '{{ tile.resources|escapejs }}', '{{ tile.goods|escapejs }}', '{{ tile.owner.profile.display_name|escapejs }}', '{{ tile.owner.population|escapejs }}')"
                         onmousemove="showTooltip(event, {{ tile.id }}, {{ tile.x }}, {{ tile.y }}, '{{ tile.buildings|escapejs }}', '{{ tile.resources|escapejs }}', '{{ tile.owner.profile.display_name|escapejs }}', '{{ tile.population }}')"
                         onmouseout="hideTooltip()">
                         {% if tile.image %}
@@ -43,10 +43,38 @@
         <div class="details">
             <!-- Top Section: User Info -->
             <div id="user-info">
-                <h2>User Info</h2>
-                <p><strong>Nation:</strong> {{ display_name }}</p>
-                <p><strong>Money:</strong> {{ money }}</p>
-                <p><strong>Total Population:</strong> {{ user_population }}</p>
+                <h2>Game Info</h2>
+                <p><strong>Current Date:</strong> <span id="current-date"></span></p>
+                <div class="tabs">
+                    <button id="info-tab-button" class="tab-button active-tab" onclick="selectUserTab('info')">Info</button>
+                    <button id="progress-tab-button" class="tab-button" onclick="selectUserTab('progress')">Progress</button>
+                </div>
+
+                <div id="info-tab" class="tab-content">
+                    <p><strong>Nation:</strong> {{ display_name }}</p>
+                    <p><strong>Money:</strong> {{ money }}</p>
+                    <p><strong>Total Population:</strong> {{ user_population }}</p>
+                </div>
+
+                <div id="progress-tab" class="tab-content" style="display:none;">
+                    <!-- In Progress -->
+                    <div class="action-category">
+                        <h3 class="category-header" onclick="toggleSection('in-progress-list')">In Progress</h3>
+                        <ul id="in-progress-list" class="progress-list" style="display:none;"></ul>
+                    </div>
+
+                    <!-- Failed -->
+                    <div class="action-category">
+                        <h3 class="category-header" onclick="toggleSection('failed-list')">Failed</h3>
+                        <ul id="failed-list" class="progress-list" style="display:none;"></ul>
+                    </div>
+
+                    <!-- Completed -->
+                    <div class="action-category">
+                        <h3 class="category-header" onclick="toggleSection('completed-list')">Completed</h3>
+                        <ul id="completed-list" class="progress-list" style="display:none;"></ul>
+                    </div>
+                </div>
             </div>
 
             <!-- Tile Details Section -->
@@ -71,10 +99,12 @@
 
             <!-- User Actions Section -->
             <div id="user-actions">
-                <h2>Actions</h2>
-                <ul id="action-list">
-                    <!-- User actions will populate here -->
-                </ul>
+                <h2 style="margin-left: 10px;">Actions</h2>
+                <div id="action-container">
+                    <ul id="action-list">
+                        <!-- User actions will populate here -->
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

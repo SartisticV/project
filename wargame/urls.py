@@ -20,7 +20,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from game.views import map_view, queue_action, resolve_actions
+from game.views import map_view, queue_action, resolve_actions, check_ownership, get_user_actions, remove_action, calculate_path, get_user_data
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,6 +29,11 @@ urlpatterns = [
     path('map/', map_view, name='map'),  # Map view
     path('queue_action/', queue_action, name='queue_action'),
     path('resolve_actions/', resolve_actions, name='resolve_actions'),
+    path('check_ownership/', check_ownership, name='check_ownership'),
+    path('get_user_actions/', get_user_actions, name='get_user_actions'),
+    path('remove_action/<int:action_id>/', remove_action, name='remove_action'),
+    path('calculate_path/', calculate_path, name='calculate_path'),
+    path('get_user_data/', get_user_data, name='get_user_data'),
 ]
 
 if settings.DEBUG:

@@ -1,0 +1,18 @@
+{% extends "admin/change_form.html" %}
+
+{% block after_field_sets %}
+<div id="goods-container">
+    <h3>Goods</h3>
+    {% for key, value in form.instance.goods.items %}
+        <div>
+            <label>{{ key }}: </label>
+            <input type="number" name="goods[{{ key }}]" value="{{ value }}" min="0">
+        </div>
+    {% endfor %}
+    <div id="add-good-container" style="margin-bottom: 20px;">
+        <input type="text" id="good-name" placeholder="Resource Name">
+        <input type="number" id="good-amount" placeholder="Amount" min="0">
+        <button type="button" id="add-good">Add</button>
+    </div>
+</div>
+{% endblock %}

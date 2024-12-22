@@ -23,6 +23,15 @@
     height: 100%; /* Full height */
 }
 
+/* Each section takes up 1/3 of the height */
+.details > div {
+    flex: 1; /* Equal division of height */
+    overflow-y: auto; /* Vertical scroll if content exceeds height */
+    padding: 10px;
+    border: 1px solid #ccc;
+    box-sizing: border-box; /* Include padding and borders in size */
+}
+
 /* Top Section: User Info */
 #user-info {
     padding: 20px;
@@ -30,10 +39,15 @@
     border-bottom: 2px solid #ddd;
 }
 
-/* Bottom Section: Tile Details */
+/* Middle Section: Tile Details */
 #tile-details {
     padding: 20px;
-    flex-grow: 1; /* Ensure it takes remaining space */
+}
+
+/* Bottom Section: Actions */
+#action-container {
+    border: 1px solid #ccc;
+    height: 70%
 }
 
 /* Grid Layout for Tiles */
@@ -102,10 +116,52 @@
     display: none;
 }
 
-.tile.highlight-blue {
+
+.tile.highlight-blue::after,
+.tile.highlight-red::after,
+.highlight-yellow::after,
+.tile.highlight-white::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    z-index: 1; /* Ensure the highlight appears above the normal border */
+}
+
+.tile.highlight-blue::after {
     border: 2px solid blue;
 }
 
-.tile.highlight-red {
+.tile.highlight-red::after {
     border: 2px solid red;
+}
+
+.highlight-yellow::after {
+    border: 2px solid yellow;
+}
+
+.highlight-white::after {
+    border: 2px solid white;
+}
+
+/* Index number styling for scaling */
+.tile.highlight-white span,
+.tile.highlight-red span {
+    font-size: 2em; /* Size scales with parent (2x the default text size) */
+    font-weight: bold;
+    color: white;
+    z-index: 2; /* Ensure text appears above highlight */
+}
+
+/* Adjust text color for red highlights */
+.tile.highlight-red span {
+    color: white; /* White text for red-highlighted tiles */
+}
+
+.category-header {
+    cursor: pointer;
+    padding: 10px;
 }
